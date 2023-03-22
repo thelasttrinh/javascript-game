@@ -20,10 +20,10 @@ Board:
 ~ Initialize board as browser is loaded
 
 Title of Game:
-~ I don't really know, maybe a <h1> or something & display at the top of the board
+~ I don't really know, maybe a h1 or something & display at the top of the board
 
 Objective:
-~ List the objective for players with <p>
+~ List the objective for players with p
 
 Start game:
 ~ Button to call startGame() => Starts round
@@ -34,7 +34,7 @@ Difficulty setting => Set internal timers of targets in accordance to difficulty
 - Drop-down list & select one or have all buttons displayed then highlight the one selected
 - Difficulty should have preset at Easy, but can reselect in menu
 
-Game Timer to track round.
+Game Timer to track round:
 ~ Timer probably set at 60 seconds
 ~ Round ends at 0 and display scoreboard
 ~ Time will probably be displayed outside scoreboard
@@ -55,7 +55,7 @@ Actual game =>
 
     ~ Game ends on timer & displays scores
 
-Scoreboard for tracking score => What you hit or missed, total score, PR?
+Scoreboard for tracking score => What you hit or missed, total score
 ~ scoreHit() => +1
 ~ missedHit() => -1
 ~ totalHits() => 0 (Changes based on scoreHit() & missedHit())
@@ -77,5 +77,7 @@ Change mouse cursor
 Loading bar/screen
 Variety of targets (Like bomb icon that reduces score)
 HP system (Miss one, lose a heart)
+PR
+Statistics
 
 ## Pseudo-Coding

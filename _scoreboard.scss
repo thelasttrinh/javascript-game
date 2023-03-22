@@ -1,0 +1,17 @@
+.game__Scoreboard{
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr 1fr;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 18.75rem;
+    margin: 5px;
+}
+
+h1{
+    text-align: center;
+}
+
+p{
+    text-align: left;
+}
