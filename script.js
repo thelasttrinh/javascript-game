@@ -14,7 +14,7 @@ const displayScoreBoard = () => {
   gameScoreboard.innerHTML = `
         <h1>Scoreboard<h1>
         <p>Hits: <span id="hitCounter">0</span> <p>
-        <p>Missed: <span id="missCounter">0</span><p>
+        <p>Missed: <span id="missCounter">0</span> <p>
       `;
 };
 
@@ -37,17 +37,21 @@ const scoreHit = () => {
   gameContainer.addEventListener("click", () => {
     hitCounter.innerHTML++;
   });
-  return hitCounter.innerHTML;
+  // return hitCounter.innerHTML;
 };
 
 const missedHit = () => {
   const missCounter = document.getElementById("missCounter");
   const gameContainer = document.querySelector(".game__container");
-  gameContainer.addEventListener("click", () => {
-    if (!gameContainer.contains()) {
+  document.addEventListener("click", (event) => {
+    //Detect clicks outside elements, will change once targets are implemented
+    if (!gameContainer.contains(event.target)) {
+      missCounter.innerHTML++;
     }
   });
+  // return missCounter.innerHTML;
 };
 
-displayBoard();
+displayScoreBoard();
+missedHit();
 scoreHit();
