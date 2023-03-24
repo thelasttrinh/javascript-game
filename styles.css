@@ -1,3 +1,9 @@
+.game__container {
+  height: 99.5vh;
+  width: -moz-min-content;
+  width: min-content;
+}
+
 .game__Scoreboard {
   display: grid;
   grid-template-columns: 100%;
@@ -14,6 +20,19 @@ h1 {
 
 p {
   text-align: left;
+}
+
+.timerCounter {
+  display: flex;
+  justify-content: center;
+}
+
+.targetObject {
+  width: 100px;
+  height: 100px;
+  background: red;
+  border-radius: 50%;
+  overflow: hidden;
 }
 
 * {

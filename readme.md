@@ -41,8 +41,6 @@ Game Timer to track round:
 
 Actual game =>
 
-<!-- Board should detect mouse as a cursor to click on targets -->
-
 ~ Have board set up > Add scoreboard
 
     ~ Set a timer before game starts & countdown > Game starts > Target spawns > Click target to score
@@ -79,5 +77,13 @@ Variety of targets (Like bomb icon that reduces score)
 HP system (Miss one, lose a heart)
 PR
 Statistics
+Infinity Mode
 
-## Pseudo-Coding
+TODO:
+
+1. Target Spawn/Despawn Mechanic (Most important part of the game)
+2. Timer working upon round start only & mini timer before round starts
+3. End of Round Window with Reset Button
+4. Add stats to EoR Window
+5. Start Menu to initiate round & after round ends: Goes back to start
+6. Difficulty Mechanic
