@@ -64,8 +64,24 @@ const displayTarget = () => {
 };
 
 const spawnTarget = () => {
+  const gameContainer = document.querySelector(".game__container");
   displayTarget();
-  //Add random positioning within game container
+  const targetObject = document.querySelector(".targetObject");
+  const gameContainerRect = gameContainer.getBoundingClientRect();
+  const targetObjectRect = targetObject.getBoundingClientRect();
+  let randomizePositionTop =
+    Math.random() * (gameContainerRect.height - targetObjectRect.height);
+  let randomizePositionLeft =
+    Math.random() * (gameContainerRect.width - targetObjectRect.width);
+  targetObject.style.top = randomizePositionTop + "px";
+  targetObject.style.left = randomizePositionLeft + "px";
+  displayTarget();
+  // console.log(randomizePositionTop);
+  // console.log(randomizePositionLeft);
+
+  //Add random positioning within game container,
+  // make sure it doesn't overlap with other elements,
+  // only have one target on the screen each time.
 };
 
 const removeTarget = () => {
@@ -123,6 +139,6 @@ const missedHit = () => {
 };
 
 displayBoard();
-displayTarget();
+spawnTarget();
 missedHit();
 scoreHit();
