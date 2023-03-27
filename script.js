@@ -19,36 +19,41 @@ const displayScoreBoard = () => {
 };
 
 const displayTimer = (totalTime) => {
-  //Tacks on timer div without rewriting game container
   const gameContainer = document.querySelector(".game__container");
   const timerCounter = document.createElement("div");
   timerCounter.classList.add("timerCounter");
   gameContainer.appendChild(timerCounter);
 
-  //Closure function to update internal timer without globals
-  const updateTimer = () => {
-    timerCounter.innerHTML = `<span>${totalTime}<span>`;
-    totalTime--;
-    // while (totalTime > 0 && !gameContainer.contains(displayTarget())) {
-    //   spawnTarget();
-    //   if (
-    //     gameContainer.contains(displayTarget()) &&
-    //     totalTime % 5 == 0 &&
-    //     totalTime < 60
-    //   ) {
-    //     removeTarget();
-    //   }
-    // }
-    if (totalTime < 0) {
-      clearInterval(intervalId);
-      stopSpawning();
-      displayEndOfRoundStats();
-    }
-  };
-  //Update timer each second
-  updateTimer();
+  updateTimer(timerCounter, totalTime);
+};
 
-  const intervalId = setInterval(updateTimer, 1000);
+const updateTimer = (timerCounter, totalTime) => {
+  const targetObject = document.querySelector(".targetObject");
+  timerCounter.innerHTML = `<span>${totalTime}<span>`;
+  totalTime--;
+
+  const intervalId = setInterval(() => {
+    updateTimer(timerCounter, totalTime);
+  }, 1000);
+
+  // if (totalTime > 0) {
+  //   while (totalTime > 0 && !gameContainer.contains(targetObject)) {
+  //     spawnTarget();
+  //     if (
+  //       gameContainer.contains(displayTarget()) &&
+  //       totalTime % 5 == 0 &&
+  //       totalTime < 60
+  //     ) {
+  //       removeTarget();
+  //     }
+  //   }
+  // }
+
+  if (totalTime < 0) {
+    clearInterval(intervalId);
+    stopSpawning();
+    displayEndOfRoundStats();
+  }
 };
 
 const displayRound = () => {
@@ -56,17 +61,11 @@ const displayRound = () => {
   // TBD for actual game
 };
 
-const displayTarget = () => {
+const spawnTarget = (callback) => {
   const gameContainer = document.querySelector(".game__container");
   const targetObject = document.createElement("div");
   targetObject.classList.add("targetObject");
   gameContainer.appendChild(targetObject);
-};
-
-const spawnTarget = () => {
-  const gameContainer = document.querySelector(".game__container");
-  displayTarget();
-  const targetObject = document.querySelector(".targetObject");
   const gameContainerRect = gameContainer.getBoundingClientRect();
   const targetObjectRect = targetObject.getBoundingClientRect();
   let randomizePositionTop =
@@ -75,13 +74,17 @@ const spawnTarget = () => {
     Math.random() * (gameContainerRect.width - targetObjectRect.width);
   targetObject.style.top = randomizePositionTop + "px";
   targetObject.style.left = randomizePositionLeft + "px";
-  displayTarget();
+
+  targetObject.addEventListener("click", () => {
+    callback();
+    removeTarget();
+    spawnTarget(callback);
+  });
   // console.log(randomizePositionTop);
   // console.log(randomizePositionLeft);
 
-  //Add random positioning within game container,
-  // make sure it doesn't overlap with other elements,
-  // only have one target on the screen each time.
+  // Make sure it doesn't overlap with other elements
+  // Each click on target should delete and spawn a new one
 };
 
 const removeTarget = () => {
@@ -103,10 +106,7 @@ const displayEndOfRoundStats = () => {
 
 const scoreHit = () => {
   const hitCounter = document.getElementById("hitCounter");
-  const targetObject = document.querySelector(".targetObject");
-  targetObject.addEventListener("click", () => {
-    hitCounter.innerHTML++;
-  });
+  hitCounter.innerHTML++;
 };
 
 const missedHit = () => {
@@ -141,4 +141,5 @@ const missedHit = () => {
 displayBoard();
 spawnTarget();
 missedHit();
-scoreHit();
+spawnTarget(scoreHit);
+removeTarget();
