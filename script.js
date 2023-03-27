@@ -31,20 +31,19 @@ const updateTimer = (timerCounter, totalTime) => {
   // timerCounter.innerHTML = `<span>${totalTime}<span>`;
   // totalTime--;
 
-  let intervalId = setInterval(() => {
+  const intervalId = setInterval(() => {
     timerCounter.innerHTML = `<span>${totalTime}<span>`;
     totalTime--;
+    if (totalTime < 0) {
+      clearInterval(intervalId);
+      stopSpawning();
+      displayEndOfRoundStats();
+    }
   }, 1000);
 
   // const intervalId = setInterval(() => {
   //   updateTimer(timerCounter, totalTime);
   // }, 1000);
-
-  if (totalTime < 0) {
-    clearInterval(intervalId);
-    stopSpawning();
-    displayEndOfRoundStats();
-  }
 };
 
 const displayRound = () => {
