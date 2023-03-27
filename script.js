@@ -1,3 +1,7 @@
+//Global variable for PR, only stays until page is refreshed.
+let personalHitRecord = 0;
+let personalMissRecord = 0;
+
 //Functions
 
 const displayStartMenu = () => {
@@ -7,6 +11,8 @@ const displayStartMenu = () => {
 const displayBoard = () => {
   displayScoreBoard();
   displayTimer(60);
+  //Here will call a function to display inner container to take remaining space
+  displayGameBorder();
 };
 
 const displayScoreBoard = () => {
@@ -28,9 +34,6 @@ const displayTimer = (totalTime) => {
 };
 
 const updateTimer = (timerCounter, totalTime) => {
-  // timerCounter.innerHTML = `<span>${totalTime}<span>`;
-  // totalTime--;
-
   const intervalId = setInterval(() => {
     timerCounter.innerHTML = `<span>${totalTime}<span>`;
     totalTime--;
@@ -40,24 +43,35 @@ const updateTimer = (timerCounter, totalTime) => {
       displayEndOfRoundStats();
     }
   }, 1000);
-
-  // const intervalId = setInterval(() => {
-  //   updateTimer(timerCounter, totalTime);
-  // }, 1000);
 };
 
-const displayRound = () => {
-  // Need to think more about this
-  // TBD for actual game
+const displayGameBorder = () => {
+  // Probably just displayTimer(3) right before round starts
+  const innerBorder = document.createElement("div");
+  innerBorder.classList.add("innerContainer");
+  console.log("Here will make a child container for the target to spawn");
 };
 
 const spawnTarget = (callback) => {
+  //Rework function to spawn in a child container
   const gameContainer = document.querySelector(".game__container");
   const targetObject = document.createElement("div");
   targetObject.classList.add("targetObject");
   gameContainer.appendChild(targetObject);
+  const scoreboard = document.querySelector(".game__Scoreboard");
+  const timer = document.querySelector(".timerCounter");
+  console.log(scoreboard);
+  console.log(timer);
+
+  //Get boundaries
   const gameContainerRect = gameContainer.getBoundingClientRect();
   const targetObjectRect = targetObject.getBoundingClientRect();
+  const scoreboardRect = scoreboard.getBoundingClientRect();
+  const timerRect = timer.getBoundingClientRect();
+
+  console.log(scoreboardRect);
+  console.log(timerRect);
+
   let randomizePositionTop =
     Math.random() * (gameContainerRect.height - targetObjectRect.height);
   let randomizePositionLeft =
@@ -65,32 +79,37 @@ const spawnTarget = (callback) => {
   targetObject.style.top = randomizePositionTop + "px";
   targetObject.style.left = randomizePositionLeft + "px";
 
+  //Using callback function to call scoreHit after spawnTarget
+  //Fixes the issue of scoreHit not working when spawnTarget is called
   targetObject.addEventListener("click", () => {
     callback();
     removeTarget();
     spawnTarget(callback);
   });
-  // console.log(randomizePositionTop);
-  // console.log(randomizePositionLeft);
 
   // Make sure it doesn't overlap with other elements
-  // Each click on target should delete and spawn a new one
 };
 
 const removeTarget = () => {
   const targetObject = document.querySelector(".targetObject");
+
   if (targetObject) {
     targetObject.remove();
   }
 };
 
 const stopSpawning = () => {
-  //Maybe just a break in the while loop will suffice
+  //Rename to preventClick
+  const targetObject = document.querySelector(".targetObject");
+  const gameContainer = document.querySelector(".game__container");
+  targetObject.style.pointerEvents;
+  gameContainer.style.pointerEvents = "none";
   console.log("This will stop spawning targets when round ends");
 };
 
 const displayEndOfRoundStats = () => {
   //Probably displayScoreboard() + calc final stats
+
   console.log("Display stats from scoreboard here");
 };
 
@@ -118,7 +137,8 @@ const missedHit = () => {
     }
     missCounter.innerHTML++;
   });
-  //stopPropagation for preventing missCounter from incrementing on child elements
+  //stopPropagation for preventing missCounter from incrementing
+  // when clicking on child elements
   timerCounter.addEventListener("click", (event) => {
     event.stopPropagation();
   });
@@ -128,8 +148,11 @@ const missedHit = () => {
   });
 };
 
+//Display the game board
 displayBoard();
-spawnTarget();
-missedHit();
+
+//Starts spawning targets with scoreHit as callback
 spawnTarget(scoreHit);
-removeTarget();
+
+//Increments missed for each missed click
+missedHit();

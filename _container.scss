@@ -5,3 +5,7 @@
     //Total viewport height is 932.91 px (From page) => 0.995 * 932.91 = 928.25 px
     width:min-content;//Prob 99.5 vw for web design
 }
+
+.innerContainer{
+    display: flex;
+}
