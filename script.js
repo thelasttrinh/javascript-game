@@ -28,26 +28,17 @@ const displayTimer = (totalTime) => {
 };
 
 const updateTimer = (timerCounter, totalTime) => {
-  const targetObject = document.querySelector(".targetObject");
-  timerCounter.innerHTML = `<span>${totalTime}<span>`;
-  totalTime--;
+  // timerCounter.innerHTML = `<span>${totalTime}<span>`;
+  // totalTime--;
 
-  const intervalId = setInterval(() => {
-    updateTimer(timerCounter, totalTime);
+  let intervalId = setInterval(() => {
+    timerCounter.innerHTML = `<span>${totalTime}<span>`;
+    totalTime--;
   }, 1000);
 
-  // if (totalTime > 0) {
-  //   while (totalTime > 0 && !gameContainer.contains(targetObject)) {
-  //     spawnTarget();
-  //     if (
-  //       gameContainer.contains(displayTarget()) &&
-  //       totalTime % 5 == 0 &&
-  //       totalTime < 60
-  //     ) {
-  //       removeTarget();
-  //     }
-  //   }
-  // }
+  // const intervalId = setInterval(() => {
+  //   updateTimer(timerCounter, totalTime);
+  // }, 1000);
 
   if (totalTime < 0) {
     clearInterval(intervalId);
