@@ -1,0 +1,7 @@
+.game__InnerBorder{
+    border: 2px solid green;
+    //Keeps target within border
+    position: relative;
+    //Takes up the remaining space
+    flex-grow: 1;
+}

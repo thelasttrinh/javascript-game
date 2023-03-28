@@ -9,10 +9,9 @@ const displayStartMenu = () => {
 };
 
 const displayBoard = () => {
+  const timerCounter = document.querySelector(".game__timerCounter");
   displayScoreBoard();
-  displayTimer(60);
-  //Here will call a function to display inner container to take remaining space
-  displayGameBorder();
+  updateTimer(timerCounter, 30);
 };
 
 const displayScoreBoard = () => {
@@ -24,58 +23,34 @@ const displayScoreBoard = () => {
       `;
 };
 
-const displayTimer = (totalTime) => {
-  const gameContainer = document.querySelector(".game__container");
-  const timerCounter = document.createElement("div");
-  timerCounter.classList.add("timerCounter");
-  gameContainer.appendChild(timerCounter);
-
-  updateTimer(timerCounter, totalTime);
-};
-
 const updateTimer = (timerCounter, totalTime) => {
   const intervalId = setInterval(() => {
     timerCounter.innerHTML = `<span>${totalTime}<span>`;
     totalTime--;
     if (totalTime < 0) {
       clearInterval(intervalId);
-      stopSpawning();
+      preventClicking();
       displayEndOfRoundStats();
     }
   }, 1000);
 };
 
-const displayGameBorder = () => {
-  // Probably just displayTimer(3) right before round starts
-  const innerBorder = document.createElement("div");
-  innerBorder.classList.add("innerContainer");
-  console.log("Here will make a child container for the target to spawn");
-};
-
 const spawnTarget = (callback) => {
   //Rework function to spawn in a child container
-  const gameContainer = document.querySelector(".game__container");
+  const innerBorder = document.querySelector(".game__InnerBorder");
   const targetObject = document.createElement("div");
   targetObject.classList.add("targetObject");
-  gameContainer.appendChild(targetObject);
-  const scoreboard = document.querySelector(".game__Scoreboard");
-  const timer = document.querySelector(".timerCounter");
-  console.log(scoreboard);
-  console.log(timer);
+  innerBorder.appendChild(targetObject);
 
   //Get boundaries
-  const gameContainerRect = gameContainer.getBoundingClientRect();
+  const innerBorderRect = innerBorder.getBoundingClientRect();
   const targetObjectRect = targetObject.getBoundingClientRect();
-  const scoreboardRect = scoreboard.getBoundingClientRect();
-  const timerRect = timer.getBoundingClientRect();
 
-  console.log(scoreboardRect);
-  console.log(timerRect);
-
+  //Generate random coordinates
   let randomizePositionTop =
-    Math.random() * (gameContainerRect.height - targetObjectRect.height);
+    Math.random() * (innerBorderRect.height - targetObjectRect.height);
   let randomizePositionLeft =
-    Math.random() * (gameContainerRect.width - targetObjectRect.width);
+    Math.random() * (innerBorderRect.width - targetObjectRect.width);
   targetObject.style.top = randomizePositionTop + "px";
   targetObject.style.left = randomizePositionLeft + "px";
 
@@ -86,8 +61,6 @@ const spawnTarget = (callback) => {
     removeTarget();
     spawnTarget(callback);
   });
-
-  // Make sure it doesn't overlap with other elements
 };
 
 const removeTarget = () => {
@@ -98,16 +71,17 @@ const removeTarget = () => {
   }
 };
 
-const stopSpawning = () => {
+const preventClicking = () => {
   //Rename to preventClick
   const targetObject = document.querySelector(".targetObject");
   const gameContainer = document.querySelector(".game__container");
   targetObject.style.pointerEvents;
   gameContainer.style.pointerEvents = "none";
-  console.log("This will stop spawning targets when round ends");
+  console.log("Round is over");
 };
 
 const displayEndOfRoundStats = () => {
+  const finalWindow = document.createElement("div");
   //Probably displayScoreboard() + calc final stats
 
   console.log("Display stats from scoreboard here");
@@ -150,9 +124,7 @@ const missedHit = () => {
 
 //Display the game board
 displayBoard();
-
 //Starts spawning targets with scoreHit as callback
 spawnTarget(scoreHit);
-
 //Increments missed for each missed click
 missedHit();

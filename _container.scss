@@ -1,11 +1,6 @@
 .game__container{
-    // display: flex;
-    // flex-direction: column;
-    height: 99.5vh; //Max vh without creating a scroll bar
-    //Total viewport height is 932.91 px (From page) => 0.995 * 932.91 = 928.25 px
-    width:min-content;//Prob 99.5 vw for web design
-}
-
-.innerContainer{
     display: flex;
+    flex-direction: column;
+    height: 99.75vh; //Max vh without creating a scroll bar
+    width:min-content;//Prob 99.5 vw for web design
 }

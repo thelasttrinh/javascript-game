@@ -1,11 +1,9 @@
 .game__container {
-  height: 99.5vh;
+  display: flex;
+  flex-direction: column;
+  height: 99.75vh;
   width: -moz-min-content;
   width: min-content;
-}
-
-.innerContainer {
-  display: flex;
 }
 
 .game__Scoreboard {
@@ -26,7 +24,7 @@ p {
   text-align: left;
 }
 
-.timerCounter {
+.game__timerCounter {
   display: flex;
   justify-content: center;
 }
@@ -38,6 +36,12 @@ p {
   background: red;
   border-radius: 50%;
   overflow: hidden;
+}
+
+.game__InnerBorder {
+  border: 2px solid green;
+  position: relative;
+  flex-grow: 1;
 }
 
 * {
