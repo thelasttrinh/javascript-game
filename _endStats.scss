@@ -1,0 +1,11 @@
+.game__endStats{
+    display: none;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    // width: 200px;
+    // height: 100px;
+    transform: translate(-50%, -50%);
+    border: 2px solid pink;
+}

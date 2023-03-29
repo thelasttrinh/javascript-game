@@ -4,6 +4,7 @@
   height: 99.75vh;
   width: -moz-min-content;
   width: min-content;
+  position: relative;
 }
 
 .game__Scoreboard {
@@ -42,6 +43,16 @@ p {
   border: 2px solid green;
   position: relative;
   flex-grow: 1;
+}
+
+.game__endStats {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid pink;
 }
 
 * {

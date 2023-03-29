@@ -8,22 +8,39 @@ const displayStartMenu = () => {
   //Once main game is finished, make menu
 };
 
+const initializeBoard = () => {
+  const gameContainer = document.querySelector(".game__container");
+  gameContainer.innerHTML = `
+    <div class="game__Scoreboard"></div>
+    <div class="game__timerCounter"></div>
+    <div class="game__endStats"></div>
+    <div class="game__InnerBorder"></div>
+  `;
+};
+
 const displayBoard = () => {
   const timerCounter = document.querySelector(".game__timerCounter");
   displayScoreBoard();
-  updateTimer(timerCounter, 30);
+  updateTimer(timerCounter, 5);
+  //Starts spawning targets with scoreHit as callback
+  spawnTarget(scoreHit);
+  //Increments missed for each missed click
+  missedHit();
 };
 
 const displayScoreBoard = () => {
+  let initialHit = 0;
+  let initialMissed = 0;
   const gameScoreboard = document.querySelector(".game__Scoreboard");
   gameScoreboard.innerHTML = `
         <h1>Scoreboard<h1>
-        <p>Hits: <span id="hitCounter">0</span> <p>
-        <p>Missed: <span id="missCounter">0</span> <p>
+        <p>Hits: <span id="hitCounter">${initialHit}</span> <p>
+        <p>Missed: <span id="missCounter">${initialMissed}</span> <p>
       `;
 };
 
 const updateTimer = (timerCounter, totalTime) => {
+  //Determine whether timerCounter to be called in the function...
   const intervalId = setInterval(() => {
     timerCounter.innerHTML = `<span>${totalTime}<span>`;
     totalTime--;
@@ -36,7 +53,6 @@ const updateTimer = (timerCounter, totalTime) => {
 };
 
 const spawnTarget = (callback) => {
-  //Rework function to spawn in a child container
   const innerBorder = document.querySelector(".game__InnerBorder");
   const targetObject = document.createElement("div");
   targetObject.classList.add("targetObject");
@@ -72,31 +88,76 @@ const removeTarget = () => {
 };
 
 const preventClicking = () => {
-  //Rename to preventClick
   const targetObject = document.querySelector(".targetObject");
   const gameContainer = document.querySelector(".game__container");
-  targetObject.style.pointerEvents;
+  targetObject.style.pointerEvents = "none";
   gameContainer.style.pointerEvents = "none";
-  console.log("Round is over");
+};
+
+const enableClick = () => {
+  const targetObject = document.querySelector(".targetObject");
+  const gameContainer = document.querySelector(".game__container");
+  targetObject.style.pointerEvents = "auto";
+  gameContainer.style.pointerEvents = "auto";
 };
 
 const displayEndOfRoundStats = () => {
-  const finalWindow = document.createElement("div");
-  //Probably displayScoreboard() + calc final stats
+  const gameContainer = document.querySelector(".game__container");
+  const endStats = document.querySelector(".game__endStats");
+  const targetObject = document.querySelector(".targetObject");
 
-  console.log("Display stats from scoreboard here");
+  endStats.style.display = "block";
+  targetObject.style.display = "none";
+
+  const gameContainerRect = gameContainer.getBoundingClientRect();
+
+  endStats.style.top = `${
+    gameContainerRect.top + gameContainerRect.height / 2
+  }px`;
+  //gameContainerRect.width
+  //gameContainerRect.height
+  endStats.style.left = `${
+    gameContainerRect.left + gameContainerRect.width / 2
+  }px`;
+
+  //Use string literal to display score & PR score
+  endStats.innerHTML = `
+ <p>Hits PR: ${personalHitRecord}<p>
+ <p>Missed PR: ${personalMissRecord}<p>
+ <button class="game__Retry">Retry?</button>
+ `;
+
+  //Makes endStats & child elements clickable while the parent container is unclickable
+  endStats.style.pointerEvents = "auto";
+
+  //Adds retry button & enables clicking
+  const retryRound = document.querySelector(".game__Retry");
+
+  retryRound.addEventListener("click", (event) => {
+    gameContainer.innerHTML = "";
+    initializeBoard();
+    displayBoard();
+    enableClick();
+  });
+
+  //TODO: Go back to menu button
 };
 
 const scoreHit = () => {
   const hitCounter = document.getElementById("hitCounter");
-  hitCounter.innerHTML++;
+  hitCounter.textContent++;
+
+  //Using Number() & textContent to avoid string conversion issue
+  if (hitCounter.textContent > personalHitRecord) {
+    personalHitRecord = Number(hitCounter.textContent);
+  }
 };
 
 const missedHit = () => {
   const missCounter = document.getElementById("missCounter");
   const gameContainer = document.querySelector(".game__container");
   const targetObject = document.querySelector(".targetObject");
-  const timerCounter = document.querySelector(".timerCounter");
+  const timerCounter = document.querySelector(".game__timerCounter");
   const gameScoreboard = document.querySelector(".game__Scoreboard");
 
   gameContainer.addEventListener("click", (event) => {
@@ -109,8 +170,16 @@ const missedHit = () => {
     ) {
       return;
     }
-    missCounter.innerHTML++;
+    //Using Number() & textContent to avoid string conversion issue
+    // missCounter.textContent++;
+    missCounter.textContent = Number(missCounter.textContent) + 1;
+    if (missCounter.textContent > personalMissRecord) {
+      personalMissRecord = Number(missCounter.textContent);
+    }
+    console.log(missCounter);
+    console.log(personalMissRecord);
   });
+
   //stopPropagation for preventing missCounter from incrementing
   // when clicking on child elements
   timerCounter.addEventListener("click", (event) => {
@@ -122,9 +191,9 @@ const missedHit = () => {
   });
 };
 
+const checkNewPR = () => {
+  console.log("Update PR + change wording in EndStats");
+};
+
 //Display the game board
 displayBoard();
-//Starts spawning targets with scoreHit as callback
-spawnTarget(scoreHit);
-//Increments missed for each missed click
-missedHit();
