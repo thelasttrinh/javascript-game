@@ -5,7 +5,34 @@ let personalMissRecord = 0;
 //Functions
 
 const displayStartMenu = () => {
-  //Once main game is finished, make menu
+  //Once main game is finished, make menu & difficulty
+  const gameContainer = document.querySelector(".game__container");
+  gameContainer.innerHTML = `
+  <div>
+  <h1>Wannabe Osu simulator or aim trainer</h1>
+  </div>
+  <div class="startMenu__buttons">
+  <button class="startMenu__startGame">Start Game</button>
+  <button class="startMenu__selectDiff">Select Difficulty</button>
+  </div>
+  `;
+
+  const startGame = document.querySelector(".startMenu__startGame");
+  const selectDiff = document.querySelector(".startMenu__selectDiff");
+
+  //Event Listener for buttons
+  startGame.addEventListener("click", (event) => {
+    gameContainer.innerHTML = "";
+    initializeBoard();
+    displayBoard();
+    enableClick();
+  });
+
+  selectDiff.addEventListener("click", (event) => {
+    console.log(
+      "TODO: Make a list of difficulties for user to choose - Ez => Medium => Hard => Maybe Pro => Prob not but Infinite/Random?"
+    );
+  });
 };
 
 const initializeBoard = () => {
@@ -120,9 +147,10 @@ const displayEndOfRoundStats = () => {
 
   //Use string literal to display score & PR score
   endStats.innerHTML = `
- <p>Hits PR: ${personalHitRecord}<p>
- <p>Missed PR: ${personalMissRecord}<p>
+ <p id="hitPR">Hits PR: ${personalHitRecord}<p>
+ <p id="missedPR">Missed PR: ${personalMissRecord}<p>
  <button class="game__Retry">Retry?</button>
+ <button class="game__toStart">Go to Start</button>
  `;
 
   //Makes endStats & child elements clickable while the parent container is unclickable
@@ -130,12 +158,19 @@ const displayEndOfRoundStats = () => {
 
   //Adds retry button & enables clicking
   const retryRound = document.querySelector(".game__Retry");
+  const backToStart = document.querySelector(".game__toStart");
 
   retryRound.addEventListener("click", (event) => {
     gameContainer.innerHTML = "";
     initializeBoard();
     displayBoard();
     enableClick();
+  });
+
+  backToStart.addEventListener("click", (event) => {
+    gameContainer.innerHTML = "";
+    displayStartMenu();
+    gameContainer.style.pointerEvents = "auto";
   });
 
   //TODO: Go back to menu button
@@ -224,6 +259,8 @@ const missedHit = () => {
 const updateNewPR = () => {
   const hitCounter = document.getElementById("hitCounter");
   const missCounter = document.getElementById("missCounter");
+  const hitPR = document.getElementById("hitPR");
+  const missedPR = document.getElementById("missedPR");
 
   if (hitCounter.textContent > personalHitRecord) {
     personalHitRecord = Number(hitCounter.textContent);
@@ -236,7 +273,8 @@ const updateNewPR = () => {
   console.log("Update PR + change wording in EndStats");
 };
 
+displayStartMenu();
 //Display the game board
-displayBoard();
+// displayBoard();
 //Increments missed for each missed click & prevents the additional calls of missedHit()
 detectMissedHit();

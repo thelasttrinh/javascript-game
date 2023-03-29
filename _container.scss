@@ -5,3 +5,8 @@
     width:min-content;//Prob 99.5 vw for web design
     position: relative;
 }
+
+.startMenu__buttons{
+    display: flex;
+    flex-direction: row;
+}
