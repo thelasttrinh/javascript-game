@@ -21,16 +21,14 @@ const initializeBoard = () => {
 const displayBoard = () => {
   const timerCounter = document.querySelector(".game__timerCounter");
   displayScoreBoard();
-  updateTimer(timerCounter, 5);
+  updateTimer(timerCounter, 1);
   //Starts spawning targets with scoreHit as callback
   spawnTarget(scoreHit);
-  //Increments missed for each missed click
-  missedHit();
 };
 
 const displayScoreBoard = () => {
-  let initialHit = 0;
-  let initialMissed = 0;
+  const initialHit = 0;
+  const initialMissed = 0;
   const gameScoreboard = document.querySelector(".game__Scoreboard");
   gameScoreboard.innerHTML = `
         <h1>Scoreboard<h1>
@@ -149,12 +147,11 @@ const scoreHit = () => {
 
   //Using Number() & textContent to avoid string conversion issue
   if (hitCounter.textContent > personalHitRecord) {
-    personalHitRecord = Number(hitCounter.textContent);
+    updateNewPR();
   }
 };
 
-const missedHit = () => {
-  const missCounter = document.getElementById("missCounter");
+const detectMissedHit = () => {
   const gameContainer = document.querySelector(".game__container");
   const targetObject = document.querySelector(".targetObject");
   const timerCounter = document.querySelector(".game__timerCounter");
@@ -169,19 +166,11 @@ const missedHit = () => {
       event.target === gameScoreboard
     ) {
       return;
+    } else {
+      missedHit();
     }
-    //Using Number() & textContent to avoid string conversion issue
-    // missCounter.textContent++;
-    missCounter.textContent = Number(missCounter.textContent) + 1;
-    if (missCounter.textContent > personalMissRecord) {
-      personalMissRecord = Number(missCounter.textContent);
-    }
-    console.log(missCounter);
-    console.log(personalMissRecord);
   });
 
-  //stopPropagation for preventing missCounter from incrementing
-  // when clicking on child elements
   timerCounter.addEventListener("click", (event) => {
     event.stopPropagation();
   });
@@ -191,9 +180,63 @@ const missedHit = () => {
   });
 };
 
-const checkNewPR = () => {
+const missedHit = () => {
+  //Maybe consider making a function for detecting if a click is in
+  const missCounter = document.getElementById("missCounter");
+  // const gameContainer = document.querySelector(".game__container");
+  // const targetObject = document.querySelector(".targetObject");
+  // const timerCounter = document.querySelector(".game__timerCounter");
+  // const gameScoreboard = document.querySelector(".game__Scoreboard");
+
+  // gameContainer.addEventListener("click", (event) => {
+  //   if (
+  //     //Checks if container has the target or your click is on target
+  //     !gameContainer.contains(event.target) ||
+  //     event.target === targetObject ||
+  //     event.target === timerCounter ||
+  //     event.target === gameScoreboard
+  //   ) {
+  //     return;
+  //   }
+  //Using Number() & textContent to avoid string conversion issue
+  missCounter.textContent++;
+  console.log(missCounter);
+  // console.log(personalMissRecord);
+  // });
+  if (missCounter.textContent > personalMissRecord) {
+    // personalMissRecord = Number(missCounter.textContent);
+    updateNewPR();
+  }
+  // console.log(missCounter);
+  // console.log(personalMissRecord);
+
+  //stopPropagation for preventing missCounter from incrementing
+  // when clicking on child elements
+  // timerCounter.addEventListener("click", (event) => {
+  //   event.stopPropagation();
+  // });
+
+  // gameScoreboard.addEventListener("click", (event) => {
+  //   event.stopPropagation();
+  // });
+};
+
+const updateNewPR = () => {
+  const hitCounter = document.getElementById("hitCounter");
+  const missCounter = document.getElementById("missCounter");
+
+  if (hitCounter.textContent > personalHitRecord) {
+    personalHitRecord = Number(hitCounter.textContent);
+  }
+
+  if (missCounter.textContent > personalMissRecord) {
+    personalMissRecord = Number(missCounter.textContent);
+  }
+
   console.log("Update PR + change wording in EndStats");
 };
 
 //Display the game board
 displayBoard();
+//Increments missed for each missed click & prevents the additional calls of missedHit()
+detectMissedHit();
