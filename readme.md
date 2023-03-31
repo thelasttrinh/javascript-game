@@ -57,6 +57,7 @@ Scoreboard for tracking score => What you hit or missed, total score
 ~ scoreHit() => +1
 ~ missedHit() => -1
 ~ totalHits() => 0 (Changes based on scoreHit() & missedHit())
+~ Scoreboard will overlap game_container to show during round
 
 - Store highest score if doing consecutive rounds
 - Display final totals after round ends
