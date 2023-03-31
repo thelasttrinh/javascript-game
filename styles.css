@@ -7,11 +7,17 @@
   position: relative;
 }
 
-.startMenu__buttons {
+.game__top {
   display: flex;
-  flex-direction: row;
 }
 
+@media screen and (min-width: 375px) {
+  .game__container {
+    display: flex;
+    height: 99.5vh;
+    width: 99.5vw;
+  }
+}
 .game__Scoreboard {
   display: grid;
   grid-template-columns: 100%;
@@ -31,8 +37,12 @@ p {
 }
 
 .game__timerCounter {
+  grid-area: title;
+  width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  font-size: 48px;
 }
 
 .targetObject {
@@ -54,10 +64,35 @@ p {
   display: none;
   position: absolute;
   z-index: 1;
-  top: 50%;
-  left: 50%;
   transform: translate(-50%, -50%);
   border: 2px solid pink;
+}
+
+.body__Menu {
+  min-height: 100%;
+}
+
+.startMenu {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 1fr 4fr 1fr;
+  grid-template-areas: "title" "." "buttons";
+  width: 99.5vw;
+  height: 99.5vh;
+}
+
+.startMenu__title {
+  grid-area: title;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.startMenu__buttons {
+  grid-area: buttons;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 * {

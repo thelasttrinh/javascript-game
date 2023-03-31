@@ -2,27 +2,32 @@
 let personalHitRecord = 0;
 let personalMissRecord = 0;
 
+//Global for difficulty
+let difficultyLevel = "ez";
+
 //Functions
 
 const displayStartMenu = () => {
   //Once main game is finished, make menu & difficulty
-  const gameContainer = document.querySelector(".game__container");
-  gameContainer.innerHTML = `
-  <div>
+  const menuContainer = document.querySelector(".body__Menu");
+  menuContainer.innerHTML = `
+  <div class="startMenu">
+  <div class="startMenu__title">
   <h1>Wannabe Osu simulator or aim trainer</h1>
   </div>
   <div class="startMenu__buttons">
   <button class="startMenu__startGame">Start Game</button>
   <button class="startMenu__selectDiff">Select Difficulty</button>
   </div>
+  </div>
   `;
 
   const startGame = document.querySelector(".startMenu__startGame");
   const selectDiff = document.querySelector(".startMenu__selectDiff");
 
-  //Event Listener for buttons
+  //Event Listener for start and difficulty
   startGame.addEventListener("click", (event) => {
-    gameContainer.innerHTML = "";
+    menuContainer.innerHTML = "";
     initializeBoard();
     displayBoard();
     enableClick();
@@ -36,12 +41,16 @@ const displayStartMenu = () => {
 };
 
 const initializeBoard = () => {
-  const gameContainer = document.querySelector(".game__container");
-  gameContainer.innerHTML = `
-    <div class="game__Scoreboard"></div>
-    <div class="game__timerCounter"></div>
-    <div class="game__endStats"></div>
-    <div class="game__InnerBorder"></div>
+  const menuContainer = document.querySelector(".body__Menu");
+  menuContainer.innerHTML = `
+  <div class="game__container">
+    <div class="game__top">
+      <div class="game__Scoreboard"></div>
+      <div class="game__timerCounter"></div>
+    </div>
+      <div class="game__endStats"></div>
+      <div class="game__InnerBorder"></div>
+  </div>
   `;
 };
 
@@ -51,6 +60,7 @@ const displayBoard = () => {
   updateTimer(timerCounter, 1);
   //Starts spawning targets with scoreHit as callback
   spawnTarget(scoreHit);
+  detectMissedHit();
 };
 
 const displayScoreBoard = () => {
@@ -78,6 +88,7 @@ const updateTimer = (timerCounter, totalTime) => {
 };
 
 const spawnTarget = (callback) => {
+  //TODO: Add variety in targets (size, shapes, colors)
   const innerBorder = document.querySelector(".game__InnerBorder");
   const targetObject = document.createElement("div");
   targetObject.classList.add("targetObject");
@@ -127,6 +138,8 @@ const enableClick = () => {
 };
 
 const displayEndOfRoundStats = () => {
+  const innerBorder = document.querySelector(".game__InnerBorder");
+  const menuContainer = document.querySelector(".body__Menu");
   const gameContainer = document.querySelector(".game__container");
   const endStats = document.querySelector(".game__endStats");
   const targetObject = document.querySelector(".targetObject");
@@ -134,16 +147,10 @@ const displayEndOfRoundStats = () => {
   endStats.style.display = "block";
   targetObject.style.display = "none";
 
-  const gameContainerRect = gameContainer.getBoundingClientRect();
+  const innerBorderRect = innerBorder.getBoundingClientRect();
 
-  endStats.style.top = `${
-    gameContainerRect.top + gameContainerRect.height / 2
-  }px`;
-  //gameContainerRect.width
-  //gameContainerRect.height
-  endStats.style.left = `${
-    gameContainerRect.left + gameContainerRect.width / 2
-  }px`;
+  endStats.style.top = `${innerBorderRect.top + innerBorderRect.height / 2}px`;
+  endStats.style.left = `${innerBorderRect.left + innerBorderRect.width / 2}px`;
 
   //Use string literal to display score & PR score
   endStats.innerHTML = `
@@ -156,24 +163,22 @@ const displayEndOfRoundStats = () => {
   //Makes endStats & child elements clickable while the parent container is unclickable
   endStats.style.pointerEvents = "auto";
 
-  //Adds retry button & enables clicking
+  //Adds retry button + back to start button & enables clicking
   const retryRound = document.querySelector(".game__Retry");
   const backToStart = document.querySelector(".game__toStart");
 
   retryRound.addEventListener("click", (event) => {
-    gameContainer.innerHTML = "";
+    menuContainer.innerHTML = "";
     initializeBoard();
     displayBoard();
     enableClick();
   });
 
   backToStart.addEventListener("click", (event) => {
-    gameContainer.innerHTML = "";
+    menuContainer.innerHTML = "";
     displayStartMenu();
     gameContainer.style.pointerEvents = "auto";
   });
-
-  //TODO: Go back to menu button
 };
 
 const scoreHit = () => {
@@ -191,6 +196,7 @@ const detectMissedHit = () => {
   const targetObject = document.querySelector(".targetObject");
   const timerCounter = document.querySelector(".game__timerCounter");
   const gameScoreboard = document.querySelector(".game__Scoreboard");
+  const endStats = document.querySelector(".game__endStats");
 
   gameContainer.addEventListener("click", (event) => {
     if (
@@ -198,7 +204,9 @@ const detectMissedHit = () => {
       !gameContainer.contains(event.target) ||
       event.target === targetObject ||
       event.target === timerCounter ||
-      event.target === gameScoreboard
+      event.target === gameScoreboard ||
+      event.target === endStats ||
+      event.target === gameContainer
     ) {
       return;
     } else {
@@ -213,54 +221,27 @@ const detectMissedHit = () => {
   gameScoreboard.addEventListener("click", (event) => {
     event.stopPropagation();
   });
+
+  endStats.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
 };
 
 const missedHit = () => {
-  //Maybe consider making a function for detecting if a click is in
   const missCounter = document.getElementById("missCounter");
-  // const gameContainer = document.querySelector(".game__container");
-  // const targetObject = document.querySelector(".targetObject");
-  // const timerCounter = document.querySelector(".game__timerCounter");
-  // const gameScoreboard = document.querySelector(".game__Scoreboard");
-
-  // gameContainer.addEventListener("click", (event) => {
-  //   if (
-  //     //Checks if container has the target or your click is on target
-  //     !gameContainer.contains(event.target) ||
-  //     event.target === targetObject ||
-  //     event.target === timerCounter ||
-  //     event.target === gameScoreboard
-  //   ) {
-  //     return;
-  //   }
   //Using Number() & textContent to avoid string conversion issue
   missCounter.textContent++;
   console.log(missCounter);
-  // console.log(personalMissRecord);
-  // });
   if (missCounter.textContent > personalMissRecord) {
-    // personalMissRecord = Number(missCounter.textContent);
     updateNewPR();
   }
-  // console.log(missCounter);
-  // console.log(personalMissRecord);
-
-  //stopPropagation for preventing missCounter from incrementing
-  // when clicking on child elements
-  // timerCounter.addEventListener("click", (event) => {
-  //   event.stopPropagation();
-  // });
-
-  // gameScoreboard.addEventListener("click", (event) => {
-  //   event.stopPropagation();
-  // });
 };
 
 const updateNewPR = () => {
   const hitCounter = document.getElementById("hitCounter");
   const missCounter = document.getElementById("missCounter");
-  const hitPR = document.getElementById("hitPR");
-  const missedPR = document.getElementById("missedPR");
+  // const hitPR = document.getElementById("hitPR");
+  // const missedPR = document.getElementById("missedPR");
 
   if (hitCounter.textContent > personalHitRecord) {
     personalHitRecord = Number(hitCounter.textContent);
@@ -274,7 +255,7 @@ const updateNewPR = () => {
 };
 
 displayStartMenu();
-//Display the game board
-// displayBoard();
-//Increments missed for each missed click & prevents the additional calls of missedHit()
-detectMissedHit();
+
+//Test Case
+
+// module.exports = { updateNewPR };

@@ -6,7 +6,14 @@
     position: relative;
 }
 
-.startMenu__buttons{
+.game__top{
     display: flex;
-    flex-direction: row;
+}
+
+@media screen and (min-width: 375px){
+    .game__container{
+        display: flex;
+        height: 99.5vh;
+        width: 99.5vw;
+    }
 }
