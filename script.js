@@ -57,7 +57,7 @@ const initializeBoard = () => {
 const displayBoard = () => {
   const timerCounter = document.querySelector(".game__timerCounter");
   displayScoreBoard();
-  updateTimer(timerCounter, 1);
+  updateTimer(timerCounter, 30);
   //Starts spawning targets with scoreHit as callback
   spawnTarget(scoreHit);
   detectMissedHit();
@@ -185,7 +185,6 @@ const scoreHit = () => {
   const hitCounter = document.getElementById("hitCounter");
   hitCounter.textContent++;
 
-  //Using Number() & textContent to avoid string conversion issue
   if (hitCounter.textContent > personalHitRecord) {
     updateNewPR();
   }
@@ -240,8 +239,8 @@ const missedHit = () => {
 const updateNewPR = () => {
   const hitCounter = document.getElementById("hitCounter");
   const missCounter = document.getElementById("missCounter");
-  // const hitPR = document.getElementById("hitPR");
-  // const missedPR = document.getElementById("missedPR");
+
+  //Using Number() & textContent to avoid string conversion issue
 
   if (hitCounter.textContent > personalHitRecord) {
     personalHitRecord = Number(hitCounter.textContent);
